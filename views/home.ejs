@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+</head>
+<body>
+    <%if(status==='loggedout'){%>
+    <form action="/login" method="post">
+        Username : <input placeholder="Enter your username" type="text" name="username"><br><br>
+        <input type="text" name="user" value="cust" hidden>
+        Password : <input type="password" name="password" placeholder="Enter your password"><br><br>
+        <input type="submit">
+    </form>
+    <a href="localhost:8000/reg" >Not a member ?</a>
+
+    <%}else if(status==='prod'){%>
+        <h1>List of Products :</h1><span style="margin-left: 60%;">Hello <%= username%><form action="/viewcart" method="POST">
+        <input type="text" name="username" hidden value=<%=username%> >
+        <input type="submit" value="View Cart">
+        </form></span>
+        <%for(var i=0;i<data.length;i++){%>
+        <form method="post" action="/addtocart">
+            <h4>Title : <%= data[i].title %></h4>
+            <input type="text" name ="title" hidden value="<%=data[i].title%>">
+            <h4>Description : <%= data[i].description %></h4>
+            <!-- <input type="text" name ="title" hidden value=<%=data.title%>> -->
+            <h4>Price : <%= data[i].price %></h4>
+            <input type="text" name ="price" hidden value=<%=data[i].price%>>
+            <input type="text" name ="username" hidden value=<%=username%>>
+            <h4>Available Quantity : <%= data[i].quantity%></h4>
+            <input type="number" name ="quantity">
+            <input type="submit" value="Add to cart!">
+        </form>
+        <br><br><hr>
+        
+    <%}%>
+    <%}else if(status==='cart'){%>
+        <form action="/" method="post">
+        <input type="text" name="status" value="loggedin" hidden >
+        <input type="text" name="username" value=<%=username%> hidden >
+        <input type="submit" value="Add more products">
+        </form>
+        <% var nettotal=0 %>
+        <table>
+            <tr>
+            <th>Name of Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Discard</th>
+            </tr>
+            <%for(var i =0;i<carts.length;i++){%>
+                <tr>
+                <td><%=carts[i].title%></td>    
+                <td><%=carts[i].price%></td>    
+                <td><%=carts[i].quantity%></td>    
+                <%var x = carts[i].price*carts[i].quantity%>
+                <%nettotal+=carts[i].price*carts[i].quantity%>
+                <td><%=x%></td>
+                <td><form action="/deletefromcart" method="post">
+                <input type="text" name="title" hidden value="<%=carts[i].title%>" >
+                <input type="text" name="quantity" hidden value="<%=carts[i].quantity%>" >
+                <input type="text" name="username" hidden value=<%=username%> >
+                <input type="submit" value="Remove" id="">
+                </form></td>    
+            </tr>
+            <%}%>
+        </table>
+        <form action="/buy" method="post">
+            <input type="text" name="username" hidden value=<%=username%>>
+            <input type="text" name="total" hidden value=<%=nettotal%> >
+            <input type="submit" value="Pay Now">
+        </form>
+    <%}else if(status==='bought'){%>
+        <h2>Thank You for shopping with us!</h2>
+        <form action="/" method="post">
+            <input type="text" name="status" value="loggedin" hidden >
+            <input type="text" name="username" value=<%=username%> hidden >
+            <input type="submit" value="Want to shop more?">
+            </form>
+    <%}else{%>
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Enter a Username"><br><br>
+            <input type="text" name="email" placeholder="Enter Your Mail ID"><br><br>
+            <input type="password" name="password" placeholder="Enter a password"><br><br>
+            <input type="submit" name="" value="Enroll mE" id="">
+        </form>
+        <%}%>
+</body>
+</html>

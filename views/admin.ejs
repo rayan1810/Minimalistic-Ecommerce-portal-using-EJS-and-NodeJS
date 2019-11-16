@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin</title>
+</head>
+<body>
+    <%if(status==='loggedout'){%>
+    <form action="/login" method="post">
+        Username : <input placeholder="Enter your username" type="text" name="username"><br><br>
+        <input type="text" name="user" value="admin" hidden>
+        Password : <input type="password" name="password" placeholder="Enter your password"><br><br>
+        <input type="submit">
+    </form>
+    <!-- <a href="localhost:8000/reg" >Not a member ?</a> -->
+
+    <%}else{%>
+        <h1>Add Product : </h1>
+        <form action="/addproduct" method="post">
+            <h4>Product Title : </h4>
+            <input type="text" name="title" placeholder="Enter Product name">
+            <h4>Product Description : </h4>
+            <input type="text" name="description" placeholder="Enter Product Description">
+            <h4>Product Price : </h4>
+            <input type="text" name="price" placeholder="Enter Product Price">
+            <h4>Available Quantity : </h4>
+            <input type="number" name="quantity" placeholder="Available Number of Product">
+            <input type="submit" value="Add Product">
+        </form>
+        <h1>Manage Products :</h1>
+        <%for(var i=0;i<data.length;i++){%>
+        <form method="post" action="/updateproduct">
+            <h4>Current Title : <%= data[i].title %></h4>
+            <input type="text" name ="title" value=<%=data[i].title%>>
+            <h4>Current Description : <%= data[i].description %></h4>
+            <input type="text" name ="description"  value=<%=data[i].description%>>
+            <h4>Current Price : <%= data[i].price %></h4>
+            <input type="text" name ="price"  value=<%=data[i].price%>>
+            <h4>Available quantity : <%= data[i].quantity %></h4>
+            <input type="number" name ="quantity" value=<%=data[i].quantity%>>
+            <input type="radio" name="action" value="update">Update
+            <input type="radio" name="action" value="delete">Delete
+            <input type="submit" value="Update or delete product">
+        </form>
+        <br><br><hr>
+        
+    <%}%>
+
+    <%}%>
+</body>
+</html>
